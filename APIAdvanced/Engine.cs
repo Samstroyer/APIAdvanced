@@ -19,6 +19,7 @@ class Engine
     RestResponse response;
 
     int roversCount;
+    V1 activeRovers;
 
     public Engine()
     {
@@ -26,13 +27,12 @@ class Engine
 
         client = new RestClient("https://api.nasa.gov/mars-photos/api/v1/");
         response = client.GetAsync(new("rovers?api_key=" + apiKey)).Result;
-        V1 activeRovers = JsonSerializer.Deserialize<V1>(response.Content);
-        
+        activeRovers = JsonSerializer.Deserialize<V1>(response.Content);
+
+        Console.WriteLine(activeRovers);
+
+
         // roversCount = activeRovers.Rovers.Count();
-
-        V1 yes = new();
-
-        JsonSerializer.Serialize<V1>(yes);
 
     }
 

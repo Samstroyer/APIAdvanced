@@ -8,29 +8,29 @@ This class file is made for the rover object in the json sometimes queried from 
 public class Rover
 {
     [JsonPropertyName("id")]
-    public int Id { get; private set; }
+    public int Id { get; set; }
 
     [JsonPropertyName("name")]
-    public string Name { get; private set; }
+    public string Name { get; set; }
 
     [JsonPropertyName("landing_date")]
-    public string Landing_date { get; private set; }
+    public string Landing_date { get; set; }
 
     [JsonPropertyName("launch_date")]
-    public string Launch_date { get; private set; }
+    public string Launch_date { get; set; }
 
     [JsonPropertyName("status")]
-    public string Status { get; private set; }
+    public string Status { get; set; }
 
     [JsonPropertyName("max_sol")]
-    public int Max_sol { get; private set; }
+    public int Max_sol { get; set; }
 
     [JsonPropertyName("max_date")]
-    public string Max_date { get; private set; }
+    public string Max_date { get; set; }
 
     [JsonPropertyName("total_photos")]
-    public int Total_photos { get; private set; }
+    public int Total_photos { get; set; }
 
     [JsonPropertyName("cameras")]
-    public List<Camera> Cameras { get; private set; }
+    public List<Camera> Cameras { get; set; }
 }
