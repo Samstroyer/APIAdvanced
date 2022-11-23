@@ -1,7 +1,6 @@
 using System.Text.Json;
 using RestSharp;
 using Raylib_cs;
-using System;
 
 class Engine
 {
@@ -28,12 +27,14 @@ class Engine
         client = new RestClient("https://api.nasa.gov/mars-photos/api/v1/");
         response = client.GetAsync(new("rovers?api_key=" + apiKey)).Result;
         activeRovers = JsonSerializer.Deserialize<V1>(response.Content);
+        roversCount = activeRovers.Rovers.Count;
 
-        Console.WriteLine(activeRovers);
+        int dividedHeight = Raylib.GetScreenHeight() / roversCount;
+        int currHeight = dividedHeight / 2;
+        for (int i = 0; i < roversCount; i++)
+        {
 
-
-        // roversCount = activeRovers.Rovers.Count();
-
+        }
     }
 
     public void Run()
@@ -51,8 +52,8 @@ class Engine
                     break;
 
                 default:
-                    Console.WriteLine("Error!\nExiting Program!");
                     Console.WriteLine("MenuState has no recognized state...");
+                    Console.WriteLine("Error! Exiting Program!");
                     Raylib.CloseWindow();
                     break;
             }
