@@ -1,4 +1,3 @@
-using System;
 using System.Text.Json.Serialization;
 
 /*
@@ -33,4 +32,9 @@ public class Rover
 
     [JsonPropertyName("cameras")]
     public List<Camera> Cameras { get; set; }
+
+    public List<Camera> AvailableCameras()
+    {
+        return Cameras;
+    }
 }

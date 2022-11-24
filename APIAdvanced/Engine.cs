@@ -1,40 +1,29 @@
 using System.Text.Json;
-using RestSharp;
+using System.Numerics;
 using Raylib_cs;
 
 class Engine
 {
-    string apiKey = "BxUpg7OIRBnsjGirr3IRuUc2v0aeM4IpliYannDv"; //private mail api key, maybe shouldn't be shared on GitHub :D
-
     enum MenuState
     {
         Menu,
         Display
     }
     MenuState menu;
+    int fontSize = 48;
+    V1 activeRovers = new();
+    API controller = new();
+    ChoosenRover choosenRover;
 
-    RestClient client;
-    RestRequest request;
-    RestResponse response;
-
-    int roversCount;
-    V1 activeRovers;
+    RoverMenu rm = new();
+    PictureMenu pm = new();
 
     public Engine()
     {
         menu = MenuState.Menu;
+        activeRovers.InitRovers(controller.StartRequest().Content, fontSize);
 
-        client = new RestClient("https://api.nasa.gov/mars-photos/api/v1/");
-        response = client.GetAsync(new("rovers?api_key=" + apiKey)).Result;
-        activeRovers = JsonSerializer.Deserialize<V1>(response.Content);
-        roversCount = activeRovers.Rovers.Count;
-
-        int dividedHeight = Raylib.GetScreenHeight() / roversCount;
-        int currHeight = dividedHeight / 2;
-        for (int i = 0; i < roversCount; i++)
-        {
-
-        }
+        rm.CreateMenu(activeRovers.roversCount, activeRovers.longestName);
     }
 
     public void Run()
@@ -62,18 +51,49 @@ class Engine
 
     private void Menu()
     {
-        Raylib.BeginDrawing();
-        Raylib.ClearBackground(Color.WHITE);
+        string choosenName = "";
+        while (true)
+        {
+            Raylib.BeginDrawing();
+            Raylib.ClearBackground(Color.WHITE);
 
+            choosenName = rm.Display(activeRovers.Rovers, fontSize);
 
+            if (choosenName != "")
+            {
+                menu = MenuState.Display;
+                InitRover(choosenName);
+                break;
+            }
 
-        Raylib.EndDrawing();
+            Raylib.EndDrawing();
+        }
     }
 
     private void Render()
     {
-        Raylib.BeginDrawing();
-        Raylib.ClearBackground(Color.WHITE);
-        Raylib.EndDrawing();
+        // Raylib.BeginDrawing();
+        // Raylib.ClearBackground(Color.WHITE);
+
+        // //There is a maximum of 17 cameras on one rover (Perserverance has 17, Curiosity has 7 and the other 2 has 5 cameras...) 
+        // //I have to make a page button because of that...... Not nice
+        // //I will make it so that it displays 5 per page, why not
+        // for (int i = 0; i < 5; i++)
+        // {
+
+        // }
+
+        // Raylib.EndDrawing();
+    }
+
+    private void InitRover(string roverName)
+    {
+        foreach (Rover r in activeRovers.Rovers)
+        {
+            if (r.Name == roverName)
+            {
+                choosenRover = new(r);
+            }
+        }
     }
 }
