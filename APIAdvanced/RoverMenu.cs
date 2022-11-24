@@ -2,20 +2,10 @@ using System.Numerics;
 using Raylib_cs;
 
 /* 
-This class file is made for the different menu screens and buttons to them
+This class file is made for the choosing of rover menu
 */
 
-public class BaseMenu
-{
-    protected virtual void Display() { } //Not needed really as RoverMenu's Display has arguments
-}
-
-public class PictureMenu
-{
-
-}
-
-public class RoverMenu : BaseMenu
+public class RoverMenu
 {
     List<Rectangle> chooseRoverButtons;
 

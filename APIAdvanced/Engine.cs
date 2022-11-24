@@ -72,18 +72,12 @@ class Engine
 
     private void Render()
     {
-        // Raylib.BeginDrawing();
-        // Raylib.ClearBackground(Color.WHITE);
+        Raylib.BeginDrawing();
+        Raylib.ClearBackground(Color.WHITE);
 
-        // //There is a maximum of 17 cameras on one rover (Perserverance has 17, Curiosity has 7 and the other 2 has 5 cameras...) 
-        // //I have to make a page button because of that...... Not nice
-        // //I will make it so that it displays 5 per page, why not
-        // for (int i = 0; i < 5; i++)
-        // {
+        pm.Display();
 
-        // }
-
-        // Raylib.EndDrawing();
+        Raylib.EndDrawing();
     }
 
     private void InitRover(string roverName)
