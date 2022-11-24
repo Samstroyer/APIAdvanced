@@ -4,26 +4,25 @@ using Raylib_cs;
 
 class Engine
 {
-    enum MenuState
+    enum MenuStates
     {
         Menu,
         Display
     }
-    MenuState menu;
+    MenuStates menu;
     int fontSize = 48;
     V1 activeRovers = new();
     API controller = new();
-    ChoosenRover choosenRover;
 
-    RoverMenu rm = new();
-    PictureMenu pm = new();
+    RoverMenu roverPicker = new();
+    PictureMenu picturePicker;
 
     public Engine()
     {
-        menu = MenuState.Menu;
+        menu = MenuStates.Menu;
         activeRovers.InitRovers(controller.StartRequest().Content, fontSize);
 
-        rm.CreateMenu(activeRovers.roversCount, activeRovers.longestName);
+        roverPicker.CreateMenu(activeRovers.roversCount, activeRovers.longestName);
     }
 
     public void Run()
@@ -32,11 +31,11 @@ class Engine
         {
             switch (menu)
             {
-                case MenuState.Menu:
+                case MenuStates.Menu:
                     Menu();
                     break;
 
-                case MenuState.Display:
+                case MenuStates.Display:
                     Render();
                     break;
 
@@ -57,11 +56,11 @@ class Engine
             Raylib.BeginDrawing();
             Raylib.ClearBackground(Color.WHITE);
 
-            choosenName = rm.Display(activeRovers.Rovers, fontSize);
+            choosenName = roverPicker.Display(activeRovers.Rovers, fontSize);
 
             if (choosenName != "")
             {
-                menu = MenuState.Display;
+                menu = MenuStates.Display;
                 InitRover(choosenName);
                 break;
             }
@@ -72,12 +71,7 @@ class Engine
 
     private void Render()
     {
-        Raylib.BeginDrawing();
-        Raylib.ClearBackground(Color.WHITE);
-
-        pm.Display();
-
-        Raylib.EndDrawing();
+        picturePicker.Start();
     }
 
     private void InitRover(string roverName)
@@ -86,7 +80,7 @@ class Engine
         {
             if (r.Name == roverName)
             {
-                choosenRover = new(r);
+                picturePicker = new(new(r));
             }
         }
     }

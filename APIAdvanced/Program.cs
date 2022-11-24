@@ -12,7 +12,6 @@ void Setup()
     e = new();
 }
 
-
 void Draw()
 {
     e.Run();
