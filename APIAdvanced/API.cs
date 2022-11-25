@@ -2,17 +2,12 @@ using RestSharp;
 
 public class API
 {
-    public RestClient client { get; set; } = new RestClient("https://api.nasa.gov/mars-photos/api/v1/");
+    public static RestClient client { get; set; } = new RestClient("https://api.nasa.gov/mars-photos/api/v1/");
     public RestRequest request { get; set; }
     public RestResponse response { get; set; }
 
-    private string apiKey { get; set; } = "BxUpg7OIRBnsjGirr3IRuUc2v0aeM4IpliYannDv"; //private mail api key, maybe shouldn't be shared on GitHub :D
-    private string simpleKeyEnding { get; set; } = "?api_key=";
-
-    public API()
-    {
-
-    }
+    private static string apiKey { get; set; } = "BxUpg7OIRBnsjGirr3IRuUc2v0aeM4IpliYannDv"; //private mail api key, maybe shouldn't be shared on GitHub :D
+    private static string simpleKeyEnding { get; set; } = "?api_key=";
 
     public RestResponse StartRequest()
     {
@@ -21,9 +16,12 @@ public class API
         return response;
     }
 
-    public RestResponse CustomRequest(string url)
+    public RestResponse PhotoRequest(string sol, string roverName)
     {
-        request = new(url + simpleKeyEnding + apiKey);
+        //Example
+        //https://api.nasa.gov/mars-photos/api/v1/rovers/curiosity/photos?sol=0&api_key=DEMO_KEY
+
+        request = new($"rovers/{roverName}/photos?sol={sol}&api_key={apiKey}");
         response = client.GetAsync(request).Result;
         return response;
     }

@@ -1,4 +1,4 @@
-using Raylib_cs;
+using System.Text.Json;
 
 /* 
 This class file is made for the choosing of picture
@@ -15,13 +15,20 @@ public class PictureMenu
         DisplayPicture
     }
 
+    string pickedSol;
+
     MenuStates currMenu = MenuStates.EnterSol;
+    API api = new();
 
     ChoosenRover choosenRoverContainer;
+
+    ApplicationNumpad numpad;
+    CameraController cameraController;
 
     public PictureMenu(ChoosenRover cr)
     {
         choosenRoverContainer = cr;
+        numpad = new();
     }
 
     public void Start()
@@ -29,12 +36,9 @@ public class PictureMenu
         switch (currMenu)
         {
             case MenuStates.EnterSol:
-
+                EnterSol();
                 break;
             case MenuStates.ChooseCamera:
-
-                break;
-            case MenuStates.EnterPictureID:
 
                 break;
             case MenuStates.DisplayPicture:
@@ -45,14 +49,13 @@ public class PictureMenu
 
     private void EnterSol()
     {
-        while (true)
-        {
-            Raylib.BeginDrawing();
-            Raylib.ClearBackground(Color.WHITE);
+        pickedSol = numpad.Numpad(choosenRoverContainer);
+        currMenu = MenuStates.ChooseCamera;
+    }
 
-
-
-            Raylib.EndDrawing();
-        }
+    private void ChooseCamera()
+    {
+        cameraController = JsonSerializer.Deserialize<CameraController>(api.PhotoRequest(pickedSol, choosenRoverContainer.Name).Content);
+        cameraController.CameraPicker();
     }
 }
