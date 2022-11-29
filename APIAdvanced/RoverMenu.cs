@@ -47,7 +47,7 @@ public class RoverMenu
             }
             Raylib.DrawRectangleRec(chooseRoverButtons[i], c);
             int offset = Raylib.MeasureText(roverName, fontSize);
-            Raylib.DrawText(roverName, Raylib.GetScreenWidth() / 2 - offset / 2, (int)chooseRoverButtons[i].y, fontSize, Color.BLACK);
+            Raylib.DrawText(roverName, Raylib.GetScreenWidth() / 2 - offset / 2, (int)chooseRoverButtons[i].y - 3, fontSize, Color.BLACK);
         }
 
         return "";

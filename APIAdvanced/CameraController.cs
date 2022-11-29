@@ -5,17 +5,4 @@ public class CameraController
 {
     [JsonPropertyName("photos")]
     public List<Photo> Photos { get; set; }
-
-    enum MenuStates
-    {
-        ChooseCamera,
-        DisplayPicture
-    }
-
-    MenuStates menu = MenuStates.ChooseCamera;
-
-    public void CameraPicker()
-    {
-
-    }
 }

@@ -1,4 +1,5 @@
 using System.Text.Json;
+using Raylib_cs;
 
 /* 
 This class file is made for the choosing of picture
@@ -10,8 +11,7 @@ public class PictureMenu
     private enum MenuStates
     {
         EnterSol,
-        ChooseCamera,
-        EnterPictureID,
+        ChooseCameraAndPicture,
         DisplayPicture
     }
 
@@ -24,11 +24,16 @@ public class PictureMenu
 
     ApplicationNumpad numpad;
     CameraController cameraController;
+    CameraPicker cameraPicker;
+    MatchingPhotos matchingPhotos;
+
+    int pictureIndex;
 
     public PictureMenu(ChoosenRover cr)
     {
         choosenRoverContainer = cr;
         numpad = new();
+        cameraPicker = new();
     }
 
     public void Start()
@@ -38,11 +43,11 @@ public class PictureMenu
             case MenuStates.EnterSol:
                 EnterSol();
                 break;
-            case MenuStates.ChooseCamera:
-
+            case MenuStates.ChooseCameraAndPicture:
+                ChooseCamera();
                 break;
             case MenuStates.DisplayPicture:
-
+                Display();
                 break;
         }
     }
@@ -50,12 +55,60 @@ public class PictureMenu
     private void EnterSol()
     {
         pickedSol = numpad.Numpad(choosenRoverContainer);
-        currMenu = MenuStates.ChooseCamera;
+        currMenu = MenuStates.ChooseCameraAndPicture;
     }
 
     private void ChooseCamera()
     {
-        cameraController = JsonSerializer.Deserialize<CameraController>(api.PhotoRequest(pickedSol, choosenRoverContainer.Name).Content);
-        cameraController.CameraPicker();
+        cameraController = JsonSerializer.Deserialize<CameraController>(api.AvailablePhotosForSolRequest(pickedSol, choosenRoverContainer.Name).Content);
+        List<string> availableCameraNames = new();
+        int longestNameSize = 0;
+        foreach (Photo p in cameraController.Photos)
+        {
+            if (!availableCameraNames.Contains(p.Camera.Full_name))
+            {
+                availableCameraNames.Add(p.Camera.Full_name);
+                int size = Raylib.MeasureText(p.Camera.Full_name, 48);
+                if (size > longestNameSize)
+                {
+                    longestNameSize = size;
+                }
+            }
+        }
+
+        cameraPicker.CreateButtons(availableCameraNames.Count, longestNameSize, availableCameraNames);
+        string choosenCamera = cameraPicker.Display();
+        matchingPhotos = new(cameraController, choosenCamera);
+
+        currMenu = MenuStates.DisplayPicture;
+
+        numpad = new();
+        pictureIndex = numpad.Numpad(matchingPhotos.Photos.Count) - 1; // -1 because it is index
+    }
+
+    private void Display()
+    {
+        Image img = api.FetchPhoto(matchingPhotos.Photos[pictureIndex].ImgSrc);
+        Raylib.ImageResize(ref img, Raylib.GetScreenWidth(), Raylib.GetScreenHeight());
+        Texture2D t = Raylib.LoadTextureFromImage(img);
+
+        while (true)
+        {
+            Raylib.BeginDrawing();
+            Raylib.ClearBackground(Color.WHITE);
+
+            Raylib.DrawTexture(t, 0, 0, Color.WHITE);
+
+            if (Raylib.IsKeyPressed(KeyboardKey.KEY_E))
+            {
+                Console.WriteLine("yay");
+            }
+            else if (Raylib.IsKeyPressed(KeyboardKey.KEY_ENTER))
+            {
+                break;
+            }
+
+            Raylib.EndDrawing();
+        }
     }
 }

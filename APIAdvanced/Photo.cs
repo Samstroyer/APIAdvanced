@@ -12,7 +12,7 @@ public class Photo
     public Camera Camera { get; set; }
 
     [JsonPropertyName("img_src")]
-    public string img_src { get; set; }
+    public string ImgSrc { get; set; }
 
     [JsonPropertyName("earth_date")]
     public string Earth_date { get; set; }

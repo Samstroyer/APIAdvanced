@@ -9,6 +9,12 @@ It contains useful information for displaying UI
 // (string name, List<Camera> availableCameras, int cameraPages, int currentPage) choosenRover = new("", new(), 1, 1); //I have cameraPages here as it will be different per rover
 
 
+//  ----- DISCLAIMER!!!! -----
+//This class was also made for choosing camera (which now is done in the CameraPicker class)
+//This is something I forgot about when working on the project and maybe I will do it justice
+//But for now it is "dead" code. Sadly... Won't change or rewrite, so this is a bit of a confusing class
+
+
 public class ChoosenRover : Rover
 {
     List<Rectangle> choosenRoverAvailableCameraButtons;

@@ -132,4 +132,85 @@ public class ApplicationNumpad
             Raylib.EndDrawing();
         }
     }
+
+    public int Numpad(int maxNum)
+    {
+        int currentSearchInt = 0;
+
+        while (true)
+        {
+            Raylib.BeginDrawing();
+            Raylib.ClearBackground(Color.WHITE);
+
+            Raylib.DrawText($"Picture range: 0-{maxNum}", 10, 20, fontSize, Color.BLACK);
+
+            int temp;
+            if (int.TryParse(currentSearch, out temp))
+            {
+                currentSearchInt = temp;
+            }
+            else
+            {
+                currentSearchInt = 0;
+            }
+
+
+            var mousePos = Raylib.GetMousePosition();
+            Color c;
+            foreach (var item in numberButton)
+            {
+                c = Color.GREEN;
+                Raylib.DrawRectangleRec(item.rec, Color.GRAY);
+
+                string potential = currentSearch + item.num.ToString();
+                if (int.Parse(potential) > maxNum)
+                {
+                    c = Color.RED;
+                    Raylib.DrawRectangleRec(item.rec, Color.DARKGRAY);
+                }
+                else if (Raylib.CheckCollisionPointRec(mousePos, item.rec))
+                {
+                    c = Color.DARKGREEN;
+                    if (Raylib.IsMouseButtonPressed(MouseButton.MOUSE_BUTTON_LEFT))
+                    {
+                        currentSearch += item.num.ToString();
+                    }
+                }
+                Raylib.DrawText(item.num.ToString(), (int)item.rec.x + 5, (int)item.rec.y + 8, fontSize, c);
+            }
+
+            //Enter button
+            c = Color.GREEN;
+            Raylib.DrawRectangleRec(delete, Color.GRAY);
+            if (Raylib.CheckCollisionPointRec(mousePos, delete))
+            {
+                if (Raylib.IsMouseButtonPressed(MouseButton.MOUSE_BUTTON_LEFT))
+                {
+                    Raylib.EndDrawing();
+                    savedSearch = currentSearch;
+                    return int.Parse(savedSearch);
+                }
+                c = Color.DARKGREEN;
+            }
+            Raylib.DrawText("E", (int)delete.x + 5, (int)delete.y + 8, fontSize, c);
+
+            //Delete button
+            c = Color.GREEN;
+            Raylib.DrawRectangleRec(enter, Color.GRAY);
+            if (Raylib.CheckCollisionPointRec(mousePos, enter))
+            {
+                if (Raylib.IsMouseButtonPressed(MouseButton.MOUSE_BUTTON_LEFT) && currentSearch.Length > 0)
+                {
+                    currentSearch = currentSearch.Remove(currentSearch.Length - 1);
+                }
+                c = Color.DARKGREEN;
+            }
+            Raylib.DrawText("<", (int)enter.x + 5, (int)enter.y + 8, fontSize, c);
+
+            int offset = Raylib.MeasureText(currentSearch, fontSize);
+            Raylib.DrawText(currentSearch, Raylib.GetScreenWidth() / 2 - offset / 2, 400, fontSize, Color.BLACK);
+
+            Raylib.EndDrawing();
+        }
+    }
 }
