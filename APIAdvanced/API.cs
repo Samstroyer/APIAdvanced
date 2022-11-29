@@ -45,7 +45,7 @@ public class API
 
         It says jpg in url yes, but I think no
 
-        That is why this code exists...
+        That is why this code exists... (aspose code)
         */
         WebClient wc = new();
         wc.DownloadFile(imgSrc, trueFileName);
@@ -59,6 +59,8 @@ public class API
         }
 
         Image raylibImage = Raylib.LoadImage(usedFileName);
+        Raylib.ImageResize(ref raylibImage, Raylib.GetScreenWidth(), Raylib.GetScreenHeight());
+
         File.Delete(trueFileName);
         File.Delete(usedFileName);
 
@@ -82,6 +84,7 @@ public class API
             }
 
             Image raylibImage = Raylib.LoadImage(usedFileName);
+            Raylib.ImageResize(ref raylibImage, Raylib.GetScreenWidth(), Raylib.GetScreenHeight());
             imgList.Add(raylibImage);
 
             File.Delete(usedFileName);
@@ -89,7 +92,6 @@ public class API
 
             Console.WriteLine("Downloaded {0}, out of {1}", counter, photos.Count);
             counter++;
-
         }
 
         return imgList;

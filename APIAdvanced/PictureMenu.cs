@@ -64,53 +64,60 @@ public class PictureMenu
     {
         cameraController = JsonSerializer.Deserialize<CameraController>(api.AvailablePhotosForSolRequest(pickedSol, choosenRoverContainer.Name).Content);
         List<string> availableCameraNames = new();
-        int longestNameSize = 0;
-        foreach (Photo p in cameraController.Photos)
+
+        if (availableCameraNames.Count > 0)
         {
-            if (!availableCameraNames.Contains(p.Camera.Full_name))
+            int longestNameSize = 0;
+            foreach (Photo p in cameraController.Photos)
             {
-                availableCameraNames.Add(p.Camera.Full_name);
-                int size = Raylib.MeasureText(p.Camera.Full_name, 48);
-                if (size > longestNameSize)
+                if (!availableCameraNames.Contains(p.Camera.Full_name))
                 {
-                    longestNameSize = size;
+                    availableCameraNames.Add(p.Camera.Full_name);
+                    int size = Raylib.MeasureText(p.Camera.Full_name, 48);
+                    if (size > longestNameSize)
+                    {
+                        longestNameSize = size;
+                    }
                 }
             }
+
+            cameraPicker.CreateButtons(availableCameraNames.Count, longestNameSize, availableCameraNames);
+            string choosenCamera = cameraPicker.Display();
+            matchingPhotos = new(cameraController, choosenCamera);
+
+            currMenu = MenuStates.DisplayPicture;
+
+            numpad = new();
+            pictureIndex = numpad.Numpad(matchingPhotos.Photos.Count) - 1; // -1 because it is index
         }
-
-        cameraPicker.CreateButtons(availableCameraNames.Count, longestNameSize, availableCameraNames);
-        string choosenCamera = cameraPicker.Display();
-        matchingPhotos = new(cameraController, choosenCamera);
-
-        currMenu = MenuStates.DisplayPicture;
-
-        numpad = new();
-        pictureIndex = numpad.Numpad(matchingPhotos.Photos.Count) - 1; // -1 because it is index
     }
 
     private void AlternativeChooseCamera()
     {
         cameraController = JsonSerializer.Deserialize<CameraController>(api.AvailablePhotosForSolRequest(pickedSol, choosenRoverContainer.Name).Content);
         List<string> availableCameraNames = new();
-        int longestNameSize = 0;
-        foreach (Photo p in cameraController.Photos)
+        if (availableCameraNames.Count > 0)
         {
-            if (!availableCameraNames.Contains(p.Camera.Full_name))
+            int longestNameSize = 0;
+            foreach (Photo p in cameraController.Photos)
             {
-                availableCameraNames.Add(p.Camera.Full_name);
-                int size = Raylib.MeasureText(p.Camera.Full_name, 48);
-                if (size > longestNameSize)
+                if (!availableCameraNames.Contains(p.Camera.Full_name))
                 {
-                    longestNameSize = size;
+                    availableCameraNames.Add(p.Camera.Full_name);
+                    int size = Raylib.MeasureText(p.Camera.Full_name, 48);
+                    if (size > longestNameSize)
+                    {
+                        longestNameSize = size;
+                    }
                 }
             }
+
+            cameraPicker.CreateButtons(availableCameraNames.Count, longestNameSize, availableCameraNames);
+            string choosenCamera = cameraPicker.Display();
+            matchingPhotos = new(cameraController, choosenCamera);
+
+            currMenu = MenuStates.DisplayPicture;
         }
-
-        cameraPicker.CreateButtons(availableCameraNames.Count, longestNameSize, availableCameraNames);
-        string choosenCamera = cameraPicker.Display();
-        matchingPhotos = new(cameraController, choosenCamera);
-
-        currMenu = MenuStates.DisplayPicture;
     }
 
     private void AlternativeDisplay()
@@ -163,7 +170,6 @@ public class PictureMenu
                     index++;
                 }
             }
-
             Raylib.EndDrawing();
         }
     }
