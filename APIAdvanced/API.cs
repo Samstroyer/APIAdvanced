@@ -9,7 +9,8 @@ public class API
     public RestRequest request { get; set; }
     public RestResponse response { get; set; }
 
-    private string fileName = "temp.jpeg";
+    private string trueFileName = "temp.jpg";
+    private string usedFileName = "temp.png";
 
     private static string apiKey { get; set; } = "BxUpg7OIRBnsjGirr3IRuUc2v0aeM4IpliYannDv"; //private mail api key, maybe shouldn't be shared on GitHub :D
     private static string simpleKeyEnding { get; set; } = "?api_key=";
@@ -47,14 +48,50 @@ public class API
         That is why this code exists...
         */
         WebClient wc = new();
-        wc.DownloadFile(imgSrc, fileName);
+        wc.DownloadFile(imgSrc, trueFileName);
 
 
+        using (Aspose.Imaging.Image asposeImage = Aspose.Imaging.Image.Load(trueFileName))
+        {
+            // Create PNG options
 
-        // Image test = Raylib.LoadImage("a.png");
-        // Image redone = Raylib.LoadImage("redone.png");
-        //File.Delete(fileName);
+            asposeImage.Save(usedFileName);
+        }
 
-        return Raylib.LoadImage(fileName);
+        Image raylibImage = Raylib.LoadImage(usedFileName);
+        File.Delete(trueFileName);
+        File.Delete(usedFileName);
+
+        return raylibImage;
+    }
+
+    public List<Image> AlternativeFetchPhoto(List<Photo> photos)
+    {
+        List<Image> imgList = new();
+        WebClient wc = new();
+
+        int counter = 0;
+
+        foreach (Photo p in photos)
+        {
+            wc.DownloadFile(p.ImgSrc, trueFileName);
+
+            using (Aspose.Imaging.Image asposeImage = Aspose.Imaging.Image.Load(trueFileName))
+            {
+                asposeImage.Save(usedFileName);
+            }
+
+            Image raylibImage = Raylib.LoadImage(usedFileName);
+            imgList.Add(raylibImage);
+
+            File.Delete(usedFileName);
+            File.Delete(trueFileName);
+
+            Console.WriteLine("Downloaded {0}, out of {1}", counter, photos.Count);
+            counter++;
+
+        }
+
+        return imgList;
     }
 }

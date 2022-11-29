@@ -44,10 +44,12 @@ public class PictureMenu
                 EnterSol();
                 break;
             case MenuStates.ChooseCameraAndPicture:
-                ChooseCamera();
+                //ChooseCamera();
+                AlternativeChooseCamera();
                 break;
             case MenuStates.DisplayPicture:
-                Display();
+                //Display();
+                AlternativeDisplay();
                 break;
         }
     }
@@ -84,6 +86,86 @@ public class PictureMenu
 
         numpad = new();
         pictureIndex = numpad.Numpad(matchingPhotos.Photos.Count) - 1; // -1 because it is index
+    }
+
+    private void AlternativeChooseCamera()
+    {
+        cameraController = JsonSerializer.Deserialize<CameraController>(api.AvailablePhotosForSolRequest(pickedSol, choosenRoverContainer.Name).Content);
+        List<string> availableCameraNames = new();
+        int longestNameSize = 0;
+        foreach (Photo p in cameraController.Photos)
+        {
+            if (!availableCameraNames.Contains(p.Camera.Full_name))
+            {
+                availableCameraNames.Add(p.Camera.Full_name);
+                int size = Raylib.MeasureText(p.Camera.Full_name, 48);
+                if (size > longestNameSize)
+                {
+                    longestNameSize = size;
+                }
+            }
+        }
+
+        cameraPicker.CreateButtons(availableCameraNames.Count, longestNameSize, availableCameraNames);
+        string choosenCamera = cameraPicker.Display();
+        matchingPhotos = new(cameraController, choosenCamera);
+
+        currMenu = MenuStates.DisplayPicture;
+    }
+
+    private void AlternativeDisplay()
+    {
+        List<Image> imgList = api.AlternativeFetchPhoto(matchingPhotos.Photos);
+        List<Texture2D> textureList = new();
+        for (int i = 0; i < imgList.Count; i++)
+        {
+            Image testImage = imgList[i];
+            Texture2D newTexture = Raylib.LoadTextureFromImage(testImage);
+            textureList.Add(newTexture);
+        }
+
+        int index = 0;
+
+        while (true)
+        {
+            Raylib.BeginDrawing();
+            Raylib.ClearBackground(Color.WHITE);
+
+            Raylib.DrawTexture(textureList[index], 0, 0, Color.WHITE);
+
+            if (Raylib.IsKeyPressed(KeyboardKey.KEY_E))
+            {
+                Console.WriteLine("yay");
+            }
+            else if (Raylib.IsKeyPressed(KeyboardKey.KEY_ENTER))
+            {
+                break;
+            }
+            else if (Raylib.IsKeyPressed(KeyboardKey.KEY_J))
+            {
+                if (index == 0)
+                {
+                    index = textureList.Count - 1;
+                }
+                else
+                {
+                    index--;
+                }
+            }
+            else if (Raylib.IsKeyPressed(KeyboardKey.KEY_L))
+            {
+                if (index == textureList.Count - 1)
+                {
+                    index = 0;
+                }
+                else
+                {
+                    index++;
+                }
+            }
+
+            Raylib.EndDrawing();
+        }
     }
 
     private void Display()
