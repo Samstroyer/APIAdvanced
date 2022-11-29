@@ -42,12 +42,14 @@ public class API
         I have done every step ever to troubleshoot why I can download and open your images but not render them in raylib... 
         Well, it is because you give us the JFIF....
 
+        It says jpg in url yes, but I think no
+
         That is why this code exists...
         */
         WebClient wc = new();
         wc.DownloadFile(imgSrc, fileName);
 
-        
+
 
         // Image test = Raylib.LoadImage("a.png");
         // Image redone = Raylib.LoadImage("redone.png");
