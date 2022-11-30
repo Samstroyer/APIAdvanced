@@ -65,22 +65,22 @@ public class PictureMenu
         cameraController = JsonSerializer.Deserialize<CameraController>(api.AvailablePhotosForSolRequest(pickedSol, choosenRoverContainer.Name).Content);
         List<string> availableCameraNames = new();
 
-        if (availableCameraNames.Count > 0)
+        int longestNameSize = 0;
+        foreach (Photo p in cameraController.Photos)
         {
-            int longestNameSize = 0;
-            foreach (Photo p in cameraController.Photos)
+            if (!availableCameraNames.Contains(p.Camera.Full_name))
             {
-                if (!availableCameraNames.Contains(p.Camera.Full_name))
+                availableCameraNames.Add(p.Camera.Full_name);
+                int size = Raylib.MeasureText(p.Camera.Full_name, 48);
+                if (size > longestNameSize)
                 {
-                    availableCameraNames.Add(p.Camera.Full_name);
-                    int size = Raylib.MeasureText(p.Camera.Full_name, 48);
-                    if (size > longestNameSize)
-                    {
-                        longestNameSize = size;
-                    }
+                    longestNameSize = size;
                 }
             }
+        }
 
+        if (availableCameraNames.Count > 0)
+        {
             cameraPicker.CreateButtons(availableCameraNames.Count, longestNameSize, availableCameraNames);
             string choosenCamera = cameraPicker.Display();
             matchingPhotos = new(cameraController, choosenCamera);
@@ -96,22 +96,22 @@ public class PictureMenu
     {
         cameraController = JsonSerializer.Deserialize<CameraController>(api.AvailablePhotosForSolRequest(pickedSol, choosenRoverContainer.Name).Content);
         List<string> availableCameraNames = new();
-        if (availableCameraNames.Count > 0)
+        int longestNameSize = 0;
+        foreach (Photo p in cameraController.Photos)
         {
-            int longestNameSize = 0;
-            foreach (Photo p in cameraController.Photos)
+            if (!availableCameraNames.Contains(p.Camera.Full_name))
             {
-                if (!availableCameraNames.Contains(p.Camera.Full_name))
+                availableCameraNames.Add(p.Camera.Full_name);
+                int size = Raylib.MeasureText(p.Camera.Full_name, 48);
+                if (size > longestNameSize)
                 {
-                    availableCameraNames.Add(p.Camera.Full_name);
-                    int size = Raylib.MeasureText(p.Camera.Full_name, 48);
-                    if (size > longestNameSize)
-                    {
-                        longestNameSize = size;
-                    }
+                    longestNameSize = size;
                 }
             }
+        }
 
+        if (availableCameraNames.Count > 0)
+        {
             cameraPicker.CreateButtons(availableCameraNames.Count, longestNameSize, availableCameraNames);
             string choosenCamera = cameraPicker.Display();
             matchingPhotos = new(cameraController, choosenCamera);
