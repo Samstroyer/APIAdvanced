@@ -8,7 +8,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Aspose.Imaging" Version="22.11.0" />
+    <PackageReference Include="Aspose.Imaging" Version="22.12.0" />
     <PackageReference Include="Raylib-cs" Version="4.2.0.1" />
     <PackageReference Include="RestSharp" Version="108.0.2" />
   </ItemGroup>
