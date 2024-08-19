@@ -10,7 +10,7 @@ This makes it possible to sustain itself if the api updates
 public class V1
 {
     [JsonPropertyName("rovers")]
-    public List<Rover> Rovers { get; set; }
+    public List<Rover> Rovers { get; set; } = new();
 
     public int roversCount;
     public int longestName = 0;

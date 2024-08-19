@@ -25,7 +25,7 @@ public class RoverMenu
         }
     }
 
-    public string Display(List<Rover> r, int fontSize)
+    public string Display(List<Rover>? r, int fontSize)
     {
         Vector2 mouseCords = Raylib.GetMousePosition();
 

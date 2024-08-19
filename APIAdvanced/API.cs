@@ -1,20 +1,22 @@
-
 using System.Net;
 using RestSharp;
 using Raylib_cs;
 
 public class API
 {
-    public static RestClient client { get; set; } = new RestClient("https://api.nasa.gov/mars-photos/api/v1/");
-    public RestRequest request { get; set; }
-    public RestResponse response { get; set; }
+    public static RestClient client { get; } = new RestClient("https://api.nasa.gov/mars-photos/api/v1/");
+    public RestRequest? request { get; set; }
+    public RestResponse? response { get; set; }
 
     private string trueFileName = "temp.jpg";
     private string usedFileName = "temp.png";
 
-    private static string apiKey { get; set; } = "BxUpg7OIRBnsjGirr3IRuUc2v0aeM4IpliYannDv"; //private mail api key, maybe shouldn't be shared on GitHub :D
-    private static string simpleKeyEnding { get; set; } = "?api_key=";
+    private static string apiKey { get; } = "BxUpg7OIRBnsjGirr3IRuUc2v0aeM4IpliYannDv"; //private mail api key, maybe shouldn't be shared on GitHub :D
 
+    /// <summary>
+    /// Gets the rovers of the API
+    /// </summary>
+    /// <returns>Rovers</returns>
     public RestResponse StartRequest()
     {
         //request is replaced by new()
